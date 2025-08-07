@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPA Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .nav-link.active {
+            background-color: #4f46e5;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="bg-gray-800 text-white shadow-md">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center">
+                <h1 class="text-2xl font-bold">SPA Demo</h1>
+                <div class="flex space-x-4">
+                    <button id="homeBtn" class="nav-link px-4 py-2 rounded-lg transition hover:bg-gray-700 active">Home</button>
+                    <button id="aboutBtn" class="nav-link px-4 py-2 rounded-lg transition hover:bg-gray-700">About</button>
+                    <button id="contactBtn" class="nav-link px-4 py-2 rounded-lg transition hover:bg-gray-700">Contact</button>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <main class="container mx-auto p-6">
+        <div id="content" class="p-8 bg-white rounded-xl shadow-lg">
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">Welcome to the Home Page</h2>
+            <p class="text-gray-600">This is the main landing page of our Single-Page Application. Notice how the content changes, but the browser doesn't perform a full refresh. Everything you see is rendered by JavaScript on the client-side.</p>
+        </div>
+    </main>
+    <footer class="text-center py-4 text-gray-500 text-sm">
+        <p>This is a Single-Page Application. Clicks on navigation links change the content above without reloading the page.</p>
+    </footer>
+    <script src="app.js"></script>
+</body>
+</html>

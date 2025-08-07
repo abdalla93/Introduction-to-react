@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imperative Example</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .highlight {
+            color: #007bff;
+            font-weight: bold;
+        }
+        p {
+            font-size: 1.2rem;
+            padding: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: white;
+        }
+        button {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            border: 1px solid #007bff;
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <p id="welcome-message">Hello, Guest</p>
+    <button id="login-button">Log In</button>
+
+    <script>
+        // --- Imperative Instructions ---
+        // We are giving a step-by-step guide on HOW to change the UI.
+
+        // 1. Find the button element with the ID 'login-button'.
+        const loginButton = document.getElementById('login-button');
+
+        // 2. Add a click event listener to it.
+        loginButton.addEventListener('click', () => {
+            // 3. When clicked, find the paragraph with the ID 'welcome-message'.
+            const messageElement = document.getElementById('welcome-message');
+
+            // 4. Now, change its text content to 'Hello, User'.
+            messageElement.textContent = 'Hello, User';
+
+            // 5. Then, add the CSS class 'highlight'.
+            messageElement.classList.add('highlight');
+
+            // 6. Finally, disable the button.
+            loginButton.disabled = true;
+            loginButton.textContent = 'Logged In';
+        });
+    </script>
+
+</body>
+</html>

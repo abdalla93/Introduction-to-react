@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPA Navigation Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            min-height: 100vh;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        nav a.active {
+            background: rgba(255, 255, 255, 0.3);
+            font-weight: bold;
+        }
+
+        main {
+            padding: 2rem;
+            min-height: calc(100vh - 120px);
+        }
+
+        .page {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .page.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page h1 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page h2 {
+            color: #555;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.8rem;
+        }
+
+        .page p {
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            margin: 1rem 0;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        .contact-form {
+            max-width: 600px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: auto;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 0 1rem;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(76, 175, 80, 0.95);
+                padding: 1rem;
+            }
+
+            nav.active {
+                display: block;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            main {
+                padding: 1rem;
+            }
+
+            .page h1 {
+                font-size: 2rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4CAF50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <a href="#home" class="logo">SPA Demo</a>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+                <nav id="nav">
+                    <ul>
+                        <li><a href="#home" class="nav-link active">Home</a></li>
+                        <li><a href="#about" class="nav-link">About</a></li>
+                        <li><a href="#services" class="nav-link">Services</a></li>
+                        <li><a href="#contact" class="nav-link">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            <!-- Home Page -->
+            <div id="home" class="page active">
+                <h1>Welcome to Our SPA Demo</h1>
+                <div class="card">
+                    <p>This is a demonstration of a Single Page Application (SPA) built with vanilla HTML, CSS, and JavaScript. Navigate between pages using the menu above - notice how the page content changes without full page reloads!</p>
+                    
+                    <h2>Features Included:</h2>
+                    <div class="grid">
+                        <div class="card">
+                            <h3>🚀 Fast Navigation</h3>
+                            <p>Instant page transitions with smooth animations and no loading delays.</p>
+                        </div>
+                        <div class="card">
+                            <h3>📱 Responsive Design</h3>
+                            <p>Works perfectly on desktop, tablet, and mobile devices with adaptive layouts.</p>
+                        </div>
+                        <div class="card">
+                            <h3>🎨 Modern UI</h3>
+                            <p>Beautiful gradients, smooth transitions, and contemporary design elements.</p>
+                        </div>
+                        <div class="card">
+                            <h3>🔗 URL Routing</h3>
+                            <p>Browser history support with proper URL updates and back button functionality.</p>
+                        </div>
+                    </div>
+                    
+                    <a href="#about" class="btn">Learn More About Us</a>
+                </div>
+            </div>
+
+            <!-- About Page -->
+            <div id="about" class="page">
+                <h1>About Our Company</h1>
+                <div class="card">
+                    <p>We are a modern web development company specializing in creating exceptional digital experiences. Our team combines creativity with technical expertise to deliver solutions that exceed expectations.</p>
+                    
+                    <h2>Our Mission</h2>
+                    <p>To revolutionize the way businesses interact with their customers through innovative web technologies and user-centered design approaches.</p>
+                    
+                    <h2>Why Choose Us?</h2>
+                    <div class="grid">
+                        <div class="card">
+                            <h3>Expert Team</h3>
+                            <p>Our developers and designers are industry veterans with years of experience in cutting-edge technologies.</p>
+                        </div>
+                        <div class="card">
+                            <h3>Quality Focus</h3>
+                            <p>We maintain the highest standards in code quality, performance optimization, and user experience design.</p>
+                        </div>
+                        <div class="card">
+                            <h3>Client Success</h3>
+                            <p>Your success is our priority. We work closely with clients to understand their needs and exceed their goals.</p>
+                        </div>
+                    </div>
+                    
+                    <a href="#services" class="btn">View Our Services</a>
+                </div>
+            </div>
+
+            <!-- Services Page -->
+            <div id="services" class="page">
+                <h1>Our Services</h1>
+                <div class="card">
+                    <p>We offer a comprehensive range of web development and digital solutions to help your business thrive in the digital age.</p>
+                    
+                    <div class="grid">
+                        <div class="card">
+                            <h3>🌐 Web Development</h3>
+                            <p>Custom websites and web applications built with modern frameworks and best practices for optimal performance and scalability.</p>
+                            <ul style="margin-top: 1rem; color: #666;">
+                                <li>Single Page Applications (SPA)</li>
+                                <li>Progressive Web Apps (PWA)</li>
+                                <li>E-commerce Solutions</li>
+                                <li>Content Management Systems</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card">
+                            <h3>📱 Mobile Development</h3>
+                            <p>Native and cross-platform mobile applications that provide seamless user experiences across all devices.</p>
+                            <ul style="margin-top: 1rem; color: #666;">
+                                <li>iOS App Development</li>
+                                <li>Android App Development</li>
+                                <li>React Native Solutions</li>
+                                <li>App Store Optimization</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card">
+                            <h3>🎨 UI/UX Design</h3>
+                            <p>Beautiful, intuitive designs that engage users and drive conversions through thoughtful user experience research.</p>
+                            <ul style="margin-top: 1rem; color: #666;">
+                                <li>User Interface Design</li>
+                                <li>User Experience Research</li>
+                                <li>Prototyping & Wireframing</li>
+                                <li>Brand Identity Design</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card">
+                            <h3>☁️ Cloud Solutions</h3>
+                            <p>Scalable cloud infrastructure and deployment solutions to ensure your applications perform at their best.</p>
+                            <ul style="margin-top: 1rem; color: #666;">
+                                <li>AWS & Azure Deployment</li>
+                                <li>Database Management</li>
+                                <li>API Development</li>
+                                <li>Performance Optimization</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <a href="#contact" class="btn">Get Started Today</a>
+                </div>
+            </div>
+
+            <!-- Contact Page -->
+            <div id="contact" class="page">
+                <h1>Contact Us</h1>
+                <div class="card">
+                    <p>Ready to start your next project? Get in touch with us today and let's discuss how we can help bring your vision to life.</p>
+                    
+                    <div class="grid">
+                        <div>
+                            <h2>Get In Touch</h2>
+                            <form class="contact-form" onsubmit="handleFormSubmit(event)">
+                                <div class="form-group">
+                                    <label for="name">Full Name</label>
+                                    <input type="text" id="name" name="name" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="email">Email Address</label>
+                                    <input type="email" id="email" name="email" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="subject">Subject</label>
+                                    <input type="text" id="subject" name="subject" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="message">Message</label>
+                                    <textarea id="message" name="message" rows="5" required></textarea>
+                                </div>
+                                
+                                <button type="submit" class="btn">
+                                    Send Message
+                                    <span id="loading" class="loading" style="display: none;"></span>
+                                </button>
+                            </form>
+                        </div>
+                        
+                        <div>
+                            <h2>Contact Information</h2>
+                            <div class="card">
+                                <h3>📧 Email</h3>
+                                <p>hello@spacompany.com</p>
+                                
+                                <h3>📞 Phone</h3>
+                                <p>+1 (555) 123-4567</p>
+                                
+                                <h3>📍 Address</h3>
+                                <p>123 Tech Street<br>Innovation District<br>San Francisco, CA 94105</p>
+                                
+                                <h3>🕒 Business Hours</h3>
+                                <p>Monday - Friday: 9:00 AM - 6:00 PM<br>
+                                   Saturday: 10:00 AM - 4:00 PM<br>
+                                   Sunday: Closed</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 SPA Demo Company. All rights reserved. Built with ❤️ using vanilla JavaScript.</p>
+        </footer>
+    </div>
+
+    <script>
+        // SPA Navigation System
+        class SPARouter {
+            constructor() {
+                this.routes = {};
+                this.currentRoute = '';
+                this.init();
+            }
+
+            init() {
+                // Handle browser back/forward buttons
+                window.addEventListener('popstate', (e) => {
+                    this.handleRouteChange(e.state?.route || 'home');
+                });
+
+                // Handle navigation clicks
+                document.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('nav-link')) {
+                        e.preventDefault();
+                        const route = e.target.getAttribute('href').substring(1);
+                        this.navigateTo(route);
+                    }
+                });
+
+                // Set initial route
+                const initialRoute = window.location.hash.substring(1) || 'home';
+                this.navigateTo(initialRoute, false);
+            }
+
+            navigateTo(route, pushState = true) {
+                if (this.currentRoute === route) return;
+
+                // Update browser history
+                if (pushState) {
+                    history.pushState({ route }, '', `#${route}`);
+                }
+
+                this.handleRouteChange(route);
+            }
+
+            handleRouteChange(route) {
+                // Hide current page
+                const currentPage = document.querySelector('.page.active');
+                if (currentPage) {
+                    currentPage.classList.remove('active');
+                }
+
+                // Show new page with animation
+                setTimeout(() => {
+                    const newPage = document.getElementById(route);
+                    if (newPage) {
+                        newPage.classList.add('active');
+                        this.currentRoute = route;
+                        this.updateActiveNavLink(route);
+                        this.updatePageTitle(route);
+                    } else {
+                        // Fallback to home if route doesn't exist
+                        this.navigateTo('home');
+                    }
+                }, 100);
+            }
+
+            updateActiveNavLink(route) {
+                // Remove active from all nav links
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                });
+
+                // Add active to current nav link
+                const activeLink = document.querySelector(`[href="#${route}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
+            }
+
+            updatePageTitle(route) {
+                const titles = {
+                    home: 'Home - SPA Demo',
+                    about: 'About Us - SPA Demo',
+                    services: 'Our Services - SPA Demo',
+                    contact: 'Contact Us - SPA Demo'
+                };
+                document.title = titles[route] || 'SPA Demo';
+            }
+        }
+
+        // Initialize the SPA router
+        const router = new SPARouter();
+
+        // Mobile menu functionality
+        function toggleMobileMenu() {
+            const nav = document.getElementById('nav');
+            nav.classList.toggle('active');
+        }
+
+        // Form submission handler
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            const loading = document.getElementById('loading');
+            const submitBtn = event.target.querySelector('button[type="submit"]');
+            
+            // Show loading state
+            loading.style.display = 'inline-block';
+            submitBtn.disabled = true;
+            
+            // Simulate form submission (replace with actual form handling)
+            setTimeout(() => {
+                alert('Thank you for your message! We\'ll get back to you soon.');
+                
+                // Reset form
+                event.target.reset();
+                
+                // Hide loading state
+                loading.style.display = 'none';
+                submitBtn.disabled = false;
+            }, 2000);
+        }
+
+        // Add smooth scrolling to top when navigating
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const nav = document.getElementById('nav');
+            const mobileBtn = document.querySelector('.mobile-menu-btn');
+            
+            if (!nav.contains(e.target) && !mobileBtn.contains(e.target)) {
+                nav.classList.remove('active');
+            }
+        });
+
+        // Add loading animation to navigation
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                scrollToTop();
+                // Close mobile menu after navigation
+                document.getElementById('nav').classList.remove('active');
+            });
+        });
+
+        // Initialize page with fade-in animation
+        document.addEventListener('DOMContentLoaded', () => {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.5s ease';
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
