@@ -5,3 +5,4 @@ function useDocumentTitle(title) {
     document.title = title;
   }, [title]); // Only re-run if the title changes
 }
+export default useDocumentTitle;

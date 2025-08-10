@@ -1,18 +1,17 @@
 import React from 'react';
 
-export default function ItemListWithCondtion(props) {
+export default function ItemListWithCondtion() {
+  const items = ['Apple', 'Banana', 'Orange', 'Grapes', 'Mango'];
   return (
     <>
       <h2>Item List</h2>
-      {props.items > 0 ? (
-        <ul>
-          {props.items.map((item, idx) => (
-            <li key={idx}>{item}</li>
-          ))}
-        </ul>
-      ) : (
-        <p>No items available.</p>
-      )}
+      {items.length === 0 ? <p>No items available.</p> : null}
+      {items.length === 0 && <p>No items available.</p>}
+      <ul>
+        {items.map((item, idx) => (
+          <li key={idx}>{item}</li>
+        ))}
+      </ul>
     </>
   );
 }
